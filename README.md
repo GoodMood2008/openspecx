@@ -29,9 +29,9 @@ pnpm link --global
 ### 方式 2: 从 npm 安装（如果已发布）
 
 ```bash
-npm install -g @fission-ai/openspecx
+npm install -g @goodmood2008/openspecx
 # 或
-pnpm add -g @fission-ai/openspecx
+pnpm add -g @goodmood2008/openspecx
 ```
 
 ### 方式 3: 从本地打包文件安装
@@ -43,7 +43,7 @@ npm pack
 # 这会生成一个 .tgz 文件
 
 # 安装打包文件
-npm install -g ./fission-ai-openspecx-0.1.0.tgz
+npm install -g ./goodmood2008-openspecx-0.1.0.tgz
 ```
 
 详细安装说明请参考 [INSTALL.md](./INSTALL.md)。
