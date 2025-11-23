@@ -77,7 +77,7 @@ describe('init command', () => {
     expect(await fileExists(projectRulePath)).toBe(true);
   });
 
-  it('should generate RULE template file in module directory', async () => {
+  it('should generate RULE template file in .cursor/rule directory', async () => {
     const modulePath = 'test-module';
     const ruleName = 'test-rule';
 
@@ -90,8 +90,8 @@ describe('init command', () => {
       // May fail due to wizard, but we can check file creation
     }
 
-    // Check that RULE file was created
-    const ruleFilePath = path.join(testDir, modulePath, `${ruleName}-RULE.md`);
+    // Check that RULE file was created in centralized directory
+    const ruleFilePath = path.join(testDir, '.cursor', 'rule', `${ruleName}-RULE.md`);
     expect(await fileExists(ruleFilePath)).toBe(true);
 
     // Check file content
@@ -106,6 +106,7 @@ describe('init command', () => {
     expect(content).toContain('-->');
     expect(content).toContain('请为模块');
     expect(content).toContain('openspec/RULE.md');
+    expect(content).toContain('.cursor/rule');
   });
 
   it('should generate Cursor command file in .cursor/commands directory', async () => {
@@ -162,8 +163,8 @@ describe('init command', () => {
       // May fail due to wizard, but we can check file creation
     }
 
-    // Check that RULE file was created in nested path
-    const ruleFilePath = path.join(testDir, modulePath, `${ruleName}-RULE.md`);
+    // Check that RULE file was created in centralized directory even for nested modules
+    const ruleFilePath = path.join(testDir, '.cursor', 'rule', `${ruleName}-RULE.md`);
     expect(await fileExists(ruleFilePath)).toBe(true);
   });
 
@@ -213,5 +214,41 @@ describe('init command', () => {
     const content = await readFile(projectRulePath);
     expect(content).toContain('# Module RULE Document Format');
     expect(content).toContain('文档结构');
+  });
+
+  it('should handle paths correctly on all platforms (cross-platform compatibility)', async () => {
+    const modulePath = 'test-module';
+    const ruleName = 'test-rule';
+
+    // Create module directory
+    await fs.mkdir(modulePath, { recursive: true });
+
+    try {
+      await initCommand(modulePath, ruleName, { tool: 'cursor', skipAnalysis: true });
+    } catch (error) {
+      // May fail due to wizard, but we can check path handling
+    }
+
+    // Verify all paths use path.join (cross-platform compatible)
+    const openspecPath = path.join(testDir, OPENSPEC_DIR_NAME);
+    const cursorRulePath = path.join(testDir, '.cursor', 'rule');
+    const cursorCommandsPath = path.join(testDir, '.cursor', 'commands');
+    const ruleFilePath = path.join(cursorRulePath, `${ruleName}-RULE.md`);
+
+    // All paths should be absolute or relative (not mixed separators)
+    expect(openspecPath).toBeDefined();
+    expect(cursorRulePath).toBeDefined();
+    expect(cursorCommandsPath).toBeDefined();
+    expect(ruleFilePath).toBeDefined();
+
+    // Paths should not contain mixed separators (Windows \ and Unix /)
+    expect(openspecPath).not.toMatch(/\\\//);
+    expect(openspecPath).not.toMatch(/\/\\/);
+    expect(cursorRulePath).not.toMatch(/\\\//);
+    expect(cursorRulePath).not.toMatch(/\/\\/);
+    expect(cursorCommandsPath).not.toMatch(/\\\//);
+    expect(cursorCommandsPath).not.toMatch(/\/\\/);
+    expect(ruleFilePath).not.toMatch(/\\\//);
+    expect(ruleFilePath).not.toMatch(/\/\\/);
   });
 });

@@ -1,6 +1,6 @@
 {
-  "name": "@fission-ai/openspecx",
-  "version": "0.1.0",
+  "name": "@goodmood2008/openspecx",
+  "version": "0.3.0",
   "description": "OpenSpec Extensions - Module Rules Management",
   "keywords": [
     "openspecx",
@@ -11,10 +11,10 @@
     "ai",
     "development"
   ],
-  "homepage": "https://github.com/Fission-AI/OpenSpec",
+  "homepage": "https://github.com/GoodMood2008/openspecx",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Fission-AI/OpenSpec"
+    "url": "https://github.com/GoodMood2008/openspecx"
   },
   "license": "MIT",
   "author": "OpenSpec Contributors",
@@ -49,7 +49,7 @@
     "test:coverage": "vitest --coverage",
     "prepare": "pnpm run build",
     "prepublishOnly": "pnpm run build",
-    "postinstall": "chmod +x bin/openspecx.js || true"
+    "postinstall": "node scripts/postinstall.js"
   },
   "engines": {
     "node": ">=20.19.0"

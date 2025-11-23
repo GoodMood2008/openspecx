@@ -29,9 +29,9 @@ pnpm link --global
 ### 方式 2: 从 npm 安装（如果已发布）
 
 ```bash
-npm install -g @goodmood2008/openspecx
+npm install -g @fission-ai/openspecx
 # 或
-pnpm add -g @goodmood2008/openspecx
+pnpm add -g @fission-ai/openspecx
 ```
 
 ### 方式 3: 从本地打包文件安装
@@ -43,7 +43,7 @@ npm pack
 # 这会生成一个 .tgz 文件
 
 # 安装打包文件
-npm install -g ./goodmood2008-openspecx-0.1.0.tgz
+npm install -g ./fission-ai-openspecx-0.1.0.tgz
 ```
 
 详细安装说明请参考 [INSTALL.md](./INSTALL.md)。
@@ -103,7 +103,7 @@ openspecx init api/multi_language generate_multi_language --skip-analysis
 1. 提示选择 AI 工具（目前仅支持 Cursor）
 2. 分析模块代码结构
 3. 在 `.cursor/commands/` 目录生成 Cursor 命令文件
-4. 生成 RULE 模板文件
+4. 在 `.cursor/rule/` 目录生成集中管理的 RULE 模板文件
 5. 显示用于生成 RULE 内容的 AI 提示词
 
 ### Validate a RULE File
@@ -126,19 +126,19 @@ openspecx validate <ruleFile> [options]
 当您使用提示词让 AI 填充 RULE 文件时，AI 会自动执行：
 ```bash
 # AI 自动调用（在 RULE 文件的 AI 指令中已包含）
-openspecx validate api/multi_language/generate_multi_language-RULE.md --json
+openspecx validate .cursor/rule/generate_multi_language-RULE.md --json
 ```
 
 **手动调用（仅在需要时）：**
 ```bash
 # 基本验证（查看验证结果）
-openspecx validate api/multi_language/generate_multi_language-RULE.md
+openspecx validate .cursor/rule/generate_multi_language-RULE.md
 
 # 严格模式（CI/CD 场景）
-openspecx validate api/multi_language/generate_multi_language-RULE.md --strict
+openspecx validate .cursor/rule/generate_multi_language-RULE.md --strict
 
 # JSON 输出（用于脚本处理）
-openspecx validate api/multi_language/generate_multi_language-RULE.md --json
+openspecx validate .cursor/rule/generate_multi_language-RULE.md --json
 ```
 
 ### 全局选项
@@ -187,7 +187,7 @@ pnpm test:coverage # 覆盖率报告
 
 # 开发模式运行 CLI（自动构建后运行）
 pnpm dev:cli init api/multi_language test_rule
-pnpm dev:cli validate path/to/rule-RULE.md
+pnpm dev:cli validate .cursor/rule/test_rule-RULE.md
 ```
 
 ### 开发时使用 OpenSpecX 命令

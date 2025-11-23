@@ -125,9 +125,22 @@ pnpm link --global
 
 #### 方法 2: 使用安装脚本
 
+**Linux/macOS:**
 ```bash
 cd openspecx
 ./scripts/install-local.sh
+```
+
+**Windows (PowerShell):**
+```powershell
+cd openspecx
+.\scripts\install-local.ps1
+```
+
+**Windows (CMD):**
+```cmd
+cd openspecx
+scripts\install-local.bat
 ```
 
 该脚本会自动完成构建、打包和安装的整个过程。
@@ -164,7 +177,7 @@ npm install -g ./fission-ai-openspecx-0.1.0.tgz
 3. **scripts 字段**: 构建和发布脚本
    - `build`: 编译 TypeScript
    - `prepublishOnly`: 发布前自动构建
-   - `postinstall`: 安装后设置执行权限
+   - `postinstall`: 安装后设置执行权限（跨平台，自动检测系统）
 
 #### bin/openspecx.js
 
@@ -173,7 +186,9 @@ npm install -g ./fission-ai-openspecx-0.1.0.tgz
 - 动态导入编译后的 CLI 代码
 - 错误处理
 
-**注意**: `bin/openspecx.js` 必须有执行权限。`postinstall` 脚本会自动设置。
+**注意**: 
+- 在 Linux/macOS 上，`bin/openspecx.js` 必须有执行权限。`postinstall` 脚本会自动设置。
+- 在 Windows 上，npm/pnpm 会自动处理可执行文件，无需手动设置权限。
 
 #### 构建流程
 
@@ -258,7 +273,7 @@ openspecx --help
 
 # 测试命令
 openspecx init test/module test_rule
-openspecx validate test/module/test_rule-RULE.md
+openspecx validate .cursor/rule/test_rule-RULE.md
 ```
 
 ### 开发者常见问题
@@ -271,15 +286,23 @@ openspecx validate test/module/test_rule-RULE.md
 
 #### 问题：权限问题
 
-1. 检查 `bin/openspecx.js` 是否有执行权限
-2. 运行 `chmod +x bin/openspecx.js`
-3. 或使用 `postinstall` 脚本自动设置
+**Linux/macOS:**
+1. 检查 `bin/openspecx.js` 是否有执行权限: `ls -l bin/openspecx.js`
+2. 如果没有，运行 `chmod +x bin/openspecx.js`
+3. 或使用 `postinstall` 脚本自动设置（安装时会自动运行）
+
+**Windows:**
+- Windows 上 npm/pnpm 会自动处理可执行文件，通常不需要手动设置权限
+- 如果遇到权限问题，尝试以管理员身份运行命令提示符或 PowerShell
 
 #### 问题：构建错误
 
 1. 确保 TypeScript 已安装: `pnpm install`
 2. 检查 `tsconfig.json` 配置
-3. 清理后重新构建: `rm -rf dist && pnpm build`
+3. 清理后重新构建:
+   - **Linux/macOS**: `rm -rf dist && pnpm build`
+   - **Windows (PowerShell)**: `Remove-Item -Recurse -Force dist; pnpm build`
+   - **Windows (CMD)**: `rmdir /s /q dist && pnpm build`
 
 #### 问题：npm link 后命令未找到
 
@@ -300,6 +323,13 @@ pnpm link --global
 
 1. **Node.js 版本**: 要求 Node.js >= 20.19.0
 2. **ESM 模块**: 使用 ES 模块（`"type": "module"`）
-3. **执行权限**: `bin/openspecx.js` 必须有执行权限
-4. **构建产物**: 确保 `dist/` 目录包含所有编译后的文件
-5. **版本管理**: 发布前记得更新版本号
+3. **跨平台支持**: 
+   - ✅ **Linux/macOS**: 完全支持
+   - ✅ **Windows**: 完全支持（CMD、PowerShell、Git Bash）
+   - 所有路径操作使用 Node.js `path` 模块，自动适配不同平台
+   - `postinstall` 脚本自动检测平台，仅在 Unix-like 系统上设置执行权限
+4. **执行权限**: 
+   - Linux/macOS: `postinstall` 脚本会自动设置
+   - Windows: npm/pnpm 自动处理，无需手动设置
+5. **构建产物**: 确保 `dist/` 目录包含所有编译后的文件
+6. **版本管理**: 发布前记得更新版本号

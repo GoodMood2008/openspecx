@@ -61,7 +61,7 @@ The init command SHALL generate required files.
 - **WHEN** generating files
 - **THEN** it SHALL create:
   - Cursor command file: `.cursor/commands/openspecx-{ruleName}-proposal.md`
-  - RULE template file: `{modulePath}/{ruleName}-RULE.md`
+  - RULE template file: `.cursor/rule/{ruleName}-RULE.md`
   - Display AI prompt for RULE content generation
 
 ### Requirement: AI Prompt Generation

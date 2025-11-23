@@ -11,7 +11,7 @@ export class CursorCommandGenerator {
    * This command enhances openspec-proposal with paradigm-specific constraints from RULE.md
    */
   generate(ruleName: string, modulePath: string, analysis?: ModuleAnalysis): string {
-    const ruleFilePath = `${modulePath}/${ruleName}-RULE.md`;
+    const ruleFilePath = `.cursor/rule/${ruleName}-RULE.md`;
     const ruleSpecPath = 'openspec/RULE.md';
     const displayName = ruleName
       .split(/[-_]/)
@@ -123,7 +123,7 @@ ${analysis ? this.generateAnalysisContext(analysis, modulePath) : ''}
    ## Validation
    - [ ] 遵循 ${displayName} 范式所有约定
    - [ ] \`openspec validate <change-id> --strict\` 通过
-   - [ ] \`openspecx validate ${ruleFilePath}\` 通过
+   - [ ] 自动调用 \`openspecx validate ${ruleFilePath}\` 验证 RULE 文档（AI 自动执行）
    \`\`\`
 
 6. **增强 tasks.md 按 RULE Phase 组织**
@@ -168,7 +168,7 @@ ${analysis ? this.generateAnalysisContext(analysis, modulePath) : ''}
 
 **Reference**
 - Use \`openspec show <id> --json --deltas-only\` to inspect details when validation fails
-- Use \`openspecx validate ${ruleFilePath}\` to validate the RULE document itself
+- Automatically call \`openspecx validate ${ruleFilePath} --json\` to validate the RULE document (AI should call this automatically)
 - Search existing requirements with \`rg -n "Requirement:|Scenario:" openspec/specs\`
 - Reference examples from \`${ruleFilePath}\` "参考示例" section
 

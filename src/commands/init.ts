@@ -70,6 +70,13 @@ export async function initCommand(
       spinner.succeed('OpenSpec structure ready');
     }
 
+    // Step 2.1: Ensure .cursor/rule directory exists for centralized RULE storage
+    spinner.text = 'Preparing .cursor/rule directory...';
+    const cursorRoot = path.join(projectRoot, '.cursor');
+    const cursorRuleDir = path.join(cursorRoot, 'rule');
+    await ensureDirectory(cursorRuleDir);
+    spinner.succeed('.cursor/rule directory ready');
+
     // Step 2.5: Check/create project-level RULE.md (similar to openspec/AGENTS.md)
     spinner.text = 'Checking project RULE specification...';
     const projectRulePath = path.join(openspecPath, 'RULE.md');
@@ -175,7 +182,8 @@ export async function initCommand(
     // Step 8: Generate module-specific RULE file based on project specification
     spinner.text = 'Generating module RULE file...';
     const ruleFileName = `${ruleName}-RULE.md`;
-    const ruleFilePath = path.join(resolvedModulePath, ruleFileName);
+    const ruleFilePath = path.join(cursorRuleDir, ruleFileName);
+    const ruleDisplayPath = path.posix.join('.cursor', 'rule', ruleFileName);
     
     // Check if RULE file already exists
     if (await fileExists(ruleFilePath)) {
@@ -218,7 +226,7 @@ export async function initCommand(
     console.log(chalk.white('1. Populate your module RULE:'));
     console.log(
       chalk.gray(
-        `   "Please read ${modulePath}/${ruleFileName} and help me fill it out`
+        `   "Please read ${ruleDisplayPath} and help me fill it out`
       )
     );
     console.log(

@@ -22,11 +22,14 @@ export class RuleTemplateGenerator {
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
 
+    const ruleFileRelativePath = `.cursor/rule/${ruleName}-RULE.md`;
+
     // Generate AI instructions block (HTML comment, won't affect Markdown rendering)
     const aiInstructions = this.generateAIInstructions(
       ruleName,
       modulePath,
       projectRulePath,
+      ruleFileRelativePath,
       analysis
     );
 
@@ -91,6 +94,7 @@ export class RuleTemplateGenerator {
     ruleName: string,
     modulePath: string,
     projectRulePath: string,
+    ruleFileRelativePath: string,
     analysis?: ModuleAnalysis
   ): string {
     const parts: string[] = [
@@ -101,6 +105,7 @@ export class RuleTemplateGenerator {
       '',
       `规则名称: ${ruleName}`,
       '',
+      `RULE 文件路径: \`${ruleFileRelativePath}\``,
       '## 要求',
       '',
       '1. **严格遵循项目规范格式**',
@@ -206,7 +211,7 @@ export class RuleTemplateGenerator {
       '**重要**：生成内容后，必须自动进行验证和自我修正：',
       '',
       '1. **自动验证**',
-      `   - 调用工具：\`openspecx validate ${modulePath}/${ruleName}-RULE.md\``,
+      `   - 调用工具：\`openspecx validate ${ruleFileRelativePath}\``,
       '   - 如果工具不可用，运行命令：`openspecx validate <RULE文件路径> --json`',
       '   - 获取验证结果（JSON 格式）',
       '',

@@ -10,6 +10,10 @@ test/
 │   └── sample-rules/           # 测试用的 RULE 文件示例
 │       ├── valid-rule.md
 │       └── invalid-rule-missing-sections.md
+├── scripts/
+│   └── postinstall.test.ts         # postinstall 脚本测试（跨平台）
+├── utils/
+│   └── path-compatibility.test.ts  # 路径处理跨平台兼容性测试
 ├── core/
 │   ├── parsers/
 │   │   └── rule-parser.test.ts      # RULE 解析器测试
@@ -20,6 +24,7 @@ test/
 │       ├── rule-template-generator.test.ts
 │       └── prompt-generator.test.ts
 └── commands/
+    ├── init.test.ts                 # init 命令测试
     └── validate.test.ts             # validate 命令测试
 ```
 
@@ -71,6 +76,23 @@ pnpm test:coverage
 4. **命令测试**
    - ✅ validate 命令测试（有效/无效文件）
    - ✅ JSON 输出格式测试
+   - ✅ init 命令测试（模块路径验证、目录创建、文件生成）
+   - ✅ init 命令跨平台路径处理测试
+
+5. **跨平台兼容性测试** (`test/scripts/postinstall.test.ts`)
+   - ✅ 平台检测（Windows vs Unix-like）
+   - ✅ chmod 行为（Windows 不执行，Unix-like 执行）
+   - ✅ 错误处理（ENOENT 和其他错误）
+   - ✅ 路径解析跨平台兼容性
+
+6. **路径处理测试** (`test/utils/path-compatibility.test.ts`)
+   - ✅ `path.join` 跨平台兼容性
+   - ✅ `path.resolve` 跨平台兼容性
+   - ✅ `path.relative` 跨平台兼容性
+   - ✅ `path.isAbsolute` 跨平台兼容性
+   - ✅ Windows 特定路径处理（UNC 路径等）
+   - ✅ init 命令上下文中的路径构造
+   - ✅ 文件系统工具与路径操作的集成
 
 ### 待实现的测试
 

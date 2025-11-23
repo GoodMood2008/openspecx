@@ -34,6 +34,7 @@ describe('RuleTemplateGenerator', () => {
       expect(content).toContain('-->');
       expect(content).toContain(`请为模块 \`${modulePath}\` 生成完整的 RULE.md 内容`);
       expect(content).toContain(`参考: \`${projectRulePath}\``);
+      expect(content).toContain('.cursor/rule/test_rule-RULE.md');
     });
 
     it('should format rule name correctly', () => {

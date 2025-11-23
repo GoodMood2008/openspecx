@@ -10,7 +10,7 @@ describe('CursorCommandGenerator', () => {
 
       expect(content).toContain('name: /openspecx-test_rule');
       expect(content).toContain('id: openspecx-test_rule-proposal');
-      expect(content).toContain('api/test_module/test_rule-RULE.md');
+      expect(content).toContain('.cursor/rule/test_rule-RULE.md');
       expect(content).toContain('openspec/RULE.md');
       expect(content).toContain('openspec-proposal 的范式增强版本');
       expect(content).toContain('验证需求适用性');
